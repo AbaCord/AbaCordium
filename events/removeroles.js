@@ -1,12 +1,20 @@
 const CHANNEL_ID = "1417541222918131772" // reaction roles discord channel id
 
 const roles = [
-    {id: "1406392791315120299", name: "Datatek 1", emojiName: "🟥"},
-    {id: "1406393165791105156", name: "Datatek 2", emojiName: "🟦"},
-    {id: "1417545621014839366", name: "Datatek 3", emojiName: "🟩"},
-    {id: "1417545683497648179", name: "Datatek 4", emojiName: "🟨"},
-    {id: "1417545725448814674", name: "Datatek 5", emojiName: "🟪"},
-    {id: "1417545779949605025", name: "Annen linje", emojiName: "⬜"}
+    //årroller, og linje
+    {id: "1406392791315120299", name: "Datatek 1", emojiName: "1️⃣"},
+    {id: "1406393165791105156", name: "Datatek 2", emojiName: "2️⃣"},
+    {id: "1417545621014839366", name: "Datatek 3", emojiName: "3️⃣"},
+    {id: "1417545683497648179", name: "Datatek 4", emojiName: "4️⃣"},
+    {id: "1417545725448814674", name: "Datatek 5", emojiName: "5️⃣"},
+    {id: "1417545779949605025", name: "Annen linje", emojiName: "❌"},
+
+    //spillroller
+    {id: "1418312515485438072", name: "Overwatch", emojiName: "🟥"},
+    {id: "1418312548343742584", name: "League of Legends", emojiName: "🟦"},
+    {id: "1418312585006157876", name: "Minecraft", emojiName: "🟩"},
+    {id: "1418312609286852901", name: "Roblox", emojiName: "🟨"}
+
 ]
 // legge til roller
 
@@ -27,7 +35,7 @@ module.exports = {
 
     //reaction.emoji.name
     if (reaction.message.channel.id === CHANNEL_ID){
-        console.log(reaction.emoji.name)
+        //console.log(reaction.emoji.name) debugging
 
 
         let role = roles.find(role => role.emojiName === reaction.emoji.name)
