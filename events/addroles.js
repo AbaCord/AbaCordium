@@ -13,7 +13,8 @@ const roles = [
     {id: "1418312515485438072", name: "Overwatch", emojiName: "🟥"},
     {id: "1418312548343742584", name: "League of Legends", emojiName: "🟦"},
     {id: "1418312585006157876", name: "Minecraft", emojiName: "🟩"},
-    {id: "1418312609286852901", name: "Roblox", emojiName: "🟨"}
+    {id: "1418312609286852901", name: "Roblox", emojiName: "🟨"}, 
+    {id: "1418314383519518760", name: "Valorant", emojiName: "🟪" }
 
 ]
 // legge til roller
