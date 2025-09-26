@@ -1,0 +1,72 @@
+{
+	"TMA4400": {
+		"navn": "Matematikk 1: Kalkulus og lineær algebra",
+		"type": {
+			"stack": {
+				"frist": "02-09-2025",
+				"kl": "16:00",
+				"frekvens": 1,
+				"antall": 12,
+				"link": "https://stack.math.ntnu.no/course/view.php?id=48"
+			},
+			"ovsys": {
+				"frist": "12-09-2025",
+				"kl": "16:00",
+				"frekvens": 3,
+				"antall": 4,
+				"link": "https://ovsys.math.ntnu.no/student/TMA4400/2025H/"
+			}
+		}
+	},
+	"TMA4412": {
+		"navn": "Matematikk 2C: Diskret matematikk",
+		"type": {
+			"stack": {
+				"frist": "28-08-2025",
+				"kl": "17:00",
+				"frekvens": 2,
+				"antall": 7,
+				"link": "https://stack.math.ntnu.no/course/view.php?id=50"
+			},
+			"ovsys": {
+				"frist": "04-09-2025",
+				"kl": "17:00",
+				"frekvens": 2,
+				"antall": 6,
+				"link": "https://ovsys.math.ntnu.no/student/TMA4412/2025H/"
+			}
+		}
+	},
+	"TDT4109": {
+		"navn": "Informasjonsteknologi, grunnkurs",
+		"type": {
+			"Øving": {
+				"frist": "05-09-2025",
+				"kl": "23:59",
+				"frekvens": 1,
+				"antall": 8,
+				"link": "https://ntnu.blackboard.com/ultra/courses/_56340_1/cl/outline"
+			},
+			"Demotrasjon": {
+				"frist": "12-09-2025",
+				"kl": "14:00",
+				"frekvens": 1,
+				"antall": 8,
+				"link": "https://ntnu.blackboard.com/webapps/blackboard/content/listContent.jsp?course_id=_56340_1&content_id=_2843917_1&mode=reset"
+			}
+		}
+	},
+	"EXPH0300": {
+		"navn": "Examen philosophicum for naturvitenskap og teknologi",
+		"type": {
+			"Øvingoppgave": {
+				"frist": "13-10-2025",
+				"kl": "23:59",
+				"frekvens": 1,
+				"antall": 1,
+				"link": "https://ntnu.blackboard.com/ultra/courses/_53353_1/cl/outline"
+			}
+		}
+	}
+}
+
