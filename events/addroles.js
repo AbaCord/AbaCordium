@@ -2,24 +2,25 @@ const CHANNEL_ID = "1417541222918131772" // reaction roles discord channel id
 
 const roles = [
     //årroller, og linje
-    {id: "1406392791315120299", name: "Datatek 1", emojiName: "1️⃣"},
-    {id: "1406393165791105156", name: "Datatek 2", emojiName: "2️⃣"},
-    {id: "1417545621014839366", name: "Datatek 3", emojiName: "3️⃣"},
-    {id: "1417545683497648179", name: "Datatek 4", emojiName: "4️⃣"},
-    {id: "1417545725448814674", name: "Datatek 5", emojiName: "5️⃣"},
+    {id: "1406392791315120299", name: "1.år", emojiName: "1️⃣"},
+    {id: "1406393165791105156", name: "2. år", emojiName: "2️⃣"},
+    {id: "1417545621014839366", name: "3. år", emojiName: "3️⃣"},
+    {id: "1417545683497648179", name: "4. år", emojiName: "4️⃣"},
+    {id: "1417545725448814674", name: "5. år", emojiName: "5️⃣"},
     {id: "1417545779949605025", name: "Annen linje", emojiName: "❌"},
 
     //spillroller
-    {id: "1418312515485438072", name: "Overwatch", emojiName: "🟥"},
-    {id: "1418312548343742584", name: "League of Legends", emojiName: "🟦"},
-    {id: "1418312585006157876", name: "Minecraft", emojiName: "🟩"},
-    {id: "1418312609286852901", name: "Roblox", emojiName: "🟨"}, 
-    {id: "1418314383519518760", name: "Valorant", emojiName: "🟪" },
+    {id: "1418312515485438072", name: "Overwatch", emojiId: "1424754432549191893"},
+    {id: "1418312548343742584", name: "League of Legends", emojiId: "1424754475004067961"},
+    {id: "1418312585006157876", name: "Minecraft", emojiId: "1424754459568898058"},
+    {id: "1418312609286852901", name: "Roblox", emojiId: "1424755571567099925"},
+    {id: "1418314383519518760", name: "Valorant", emojiId: "1424754444800622623" },
+     {id: "1424743010654228560", name: "Marvel Rivals", emojiId: "1424754416849911858" },
 
     //hobbyroller
-    {id: "1420108296861519915", name: "Trening", emojiName: "💪"}
-
-]
+    {id: "1420108296861519915", name: "Trening", emojiName: "💪"} 
+  
+  ]
 // legge til roller
 
 
@@ -42,7 +43,7 @@ module.exports = {
         //console.log(reaction.emoji.name) debugging
 
 
-        let role = roles.find(role => role.emojiName === reaction.emoji.name)
+        let role = roles.find(role => role.emojiName === reaction.emoji.name || role.emojiId === reaction.emoji.id)
         if (!role) return;
 
 
