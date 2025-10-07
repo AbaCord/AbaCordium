@@ -57,8 +57,9 @@ module.exports = {
                         }
                         
                     }
-                    catch {
+                    catch e {
                         console.error("Failed to ban user")
+						console.error(e)
                         await confirmation.message.delete()
                         await interaction.followUp({content: "Error could not ban the user", components: [], flags: MessageFlags.Ephemeral})
                     }
