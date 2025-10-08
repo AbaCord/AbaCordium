@@ -15,7 +15,9 @@ const roles = [
     {id: "1418312585006157876", name: "Minecraft", emojiId: "1424754459568898058"},
     {id: "1418312609286852901", name: "Roblox", emojiId: "1424755571567099925"},
     {id: "1418314383519518760", name: "Valorant", emojiId: "1424754444800622623" },
-     {id: "1424743010654228560", name: "Marvel Rivals", emojiId: "1424754416849911858" },
+    {id: "1424743010654228560", name: "Marvel Rivals", emojiId: "1424754416849911858" },
+    {id: "1425464377125113927", name: "Smash Bros", emojiId: "1425482804522782864" },
+    {id: "1425482546438864906", name: "Counterstrike", emojiId: "1425482744179331215" },
 
     //hobbyroller
     {id: "1420108296861519915", name: "Trening", emojiName: "💪"} 
