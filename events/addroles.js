@@ -20,7 +20,8 @@ const roles = [
     {id: "1425482546438864906", name: "Counterstrike", emojiId: "1425482744179331215" },
 
     //hobbyroller
-    {id: "1420108296861519915", name: "Trening", emojiName: "💪"} 
+    {id: "1420108296861519915", name: "Trening", emojiName: "💪"},
+    {id: "1430606576468627606", name: "Anime", emojiName: "1430606291126063144"} 
   
   ]
 // legge til roller
