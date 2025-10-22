@@ -21,7 +21,7 @@ const roles = [
 
     //hobbyroller
     {id: "1420108296861519915", name: "Trening", emojiName: "💪"},
-    {id: "1430606576468627606", name: "Anime", emojiName: "1430606291126063144"} 
+    {id: "1430606576468627606", name: "anime", emojiId: "1430606291126063144"} 
   
   ]
 // legge til roller
@@ -43,7 +43,6 @@ module.exports = {
 
     //reaction.emoji.name
     if (reaction.message.channel.id === CHANNEL_ID){
-        //console.log(reaction.emoji.name) debugging
 
 
         let role = roles.find(role => role.emojiName === reaction.emoji.name || role.emojiId === reaction.emoji.id)
