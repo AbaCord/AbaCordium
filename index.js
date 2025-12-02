@@ -13,13 +13,7 @@ const discordToken = process.env.DISCORD_TOKEN;
 
 // Create a new client instance med riktige permissions
 const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMessageReactions,
-	GatewayIntentBits.GuildMembers,
-  ],
+  intents: Object.values(GatewayIntentBits), // Yay <:)
   partials: [
     Partials.Message,
     Partials.Channel,

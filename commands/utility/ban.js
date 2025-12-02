@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, MessageFlags} = require('discord.js');
+/*const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, MessageFlags} = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -93,3 +93,4 @@ module.exports = {
         }
 	}
 };
+*/
