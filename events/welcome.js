@@ -52,7 +52,7 @@ const welcomeMessages = [
 	"Welcome, <userID>! You’re part of something awesome now. 🚀",
 ];
 
-WELCOME_CHANNEL_ID = "1034809957402558558";
+WELCOME_CHANNEL_ID = "1424757794048970773";
 
 module.exports = {
 	name: "guildMemberAdd",
