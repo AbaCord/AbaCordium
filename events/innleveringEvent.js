@@ -22,8 +22,8 @@ dayjs.tz.setDefault("Europe/Oslo");
 
 const dayjsToDiscord = (date, format = "F") => `<t:${Math.floor(date.valueOf() / 1000)}:${format}>`;
 
-const channelId = "1421048065846149170";
-const messageId = "1421174886184915035";
+const channelId = "1418137268270399558";
+const messageId = "1421186681305956362";
 const filePath = path.resolve(__dirname, "../data/innleveringer.json");
 
 async function updateMessage(client, messageId, channelId, filePath) {
