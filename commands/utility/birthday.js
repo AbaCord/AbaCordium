@@ -9,13 +9,35 @@ module.exports = {
       sub
         .setName('set')
         .setDescription('Set birthday')
-        .addUserOption(option =>
-          option.setName('date')
-            .setDescription('Input date')
+        .addStringOption(option =>
+          option.setName('Month')
+            .setDescription('Input month')
             .setRequired(true)
+            .addChoices(
+          { name: 'Januar', value 1 },
+          { name: 'Februar', value: 2 },
+          { name: 'Mars', value 3 },
+          { name: 'April', value: 4 },
+          { name: 'Mai', value 5 },
+          { name: 'Juni', value: 6 },
+          { name: 'Juli', value 7 },
+          { name: 'August', value: 8 },
+          { name: 'September', value 9 },
+          { name: 'Oktober', value: 10 },
+          { name: 'November', value 11 },
+          { name: 'Desember', value: 12 },
+          )     
+                 
         )
+
+    .addNumberOption(option =>
+      option.setName('Day')
+      .setDescription("Input day")
+      .setRequired(true)
+
+
     )
-    
+  )
 	async execute(interaction) {
 		await interaction.reply('Pong!').catch(() => { });
 	},
