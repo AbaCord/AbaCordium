@@ -39,6 +39,21 @@ module.exports = {
     )
   )
 	async execute(interaction) {
-		await interaction.reply('Pong!').catch(() => { });
-	},
+	  	
+	  },
 };
+
+
+
+function validDate(day, month) {
+  if (day<=28 && day>=0){
+    return true;
+  }
+  if (month%2==1&&day<=31){
+    return true;
+  }
+  if(month!=2&&day<=30){
+    return true;
+  }
+  return false;
+}
