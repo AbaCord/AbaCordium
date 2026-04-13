@@ -1,39 +1,75 @@
-Her er et forslag til en README.md basert på instruksjonene dine:
+# AbaCordium
+
+AbaCordium er den offisielle Discord-boten for AbaCord, utviklet for morro og treningens skyld. Den tilbyr hittil hovedsakelig automatisering innad i discord serveren AbaCord. 
 
 
-# Velkommen til abaCord! 🚀
+## Funksjoner
 
-## Hvorfor man bør joine abaCord
-abaCord er ikke bare en vanlig Discord-server – det er et levende, kreativt og inkluderende community hvor alt fra gaming til tech-snakk blomstrer! Her er hvorfor du bør bli med:
-
-- 🎮 **Gaming og Events:** Delta i konkurranser, co-op-spill og community events.
-- 💬 **Aktivt Fellesskap:** Folk er alltid online og klare for å chatte, dele memes eller gi tips.
-- 🛠️ **Tech & Bots:** Utforsk kule bots, automatiseringer og få hjelp med koding og prosjekter.
-- 🎨 **Kreativt Hjørne:** Del kunst, musikk, programmering og annet kreativt arbeid.
-- 🤝 **Venner for Livet:** Møt likesinnede og bygg ekte vennskap.
-
-abaCord er stedet hvor du kan både slappe av og utvikle deg – en server som gjør Discord gøy igjen!
+-  Slash commands
+-  Automatisering via events
+-  Modulær command- og event-struktur for paralell utvikling
 
 ---
 
-## Ingen `git push -u origin main --force` og hvorfor
-Det kan være fristende å bruke kommandoen:
+## Brukerveiledning
 
+### 1. Klon repoet
+
+HTTPS: (for folk utenfor abacord)
 ```bash
-git push -u origin main --force
-````
+git clone https://github.com/AbaCord/AbaCordium.git
+cd AbaCordium
+```
 
-…men her er hvorfor du **ikke bør gjøre det**:
+SSH: (for utviklere)
+```bash
+git clone git@github.com:AbaCord/AbaCordium.git
+cd AbaCordium
+```
 
-* 🔥 **Risiko for å overskrive andres arbeid:** `--force` tvinger alle endringer opp, og kan slette andres commits permanent.
-* 😱 **Kan ødelegge historikken:** Alle tidligere commits kan forsvinne, og det blir vanskelig å spore endringer.
-* 🛡️ **Sikkerhetsrisiko:** I et team kan dette skape kaos og tap av verdifull kode.
+### 2. Installer dependencies
+```bash
+npm install
+```
 
-**Bedre alternativer:**
+### 3. Sett opp .env
+Opprett en `.env` fil:
 
-* Bruk `git pull --rebase` for å hente andres endringer først.
-* Lag feature-brancher og merge med `pull request` for tryggere samarbeid.
+```
+DISCORD_TOKEN=din_bot_token
+CLIENTID=din_client_id
+GUILDID=test_server_id
+```
 
-Kort sagt: Force push er som å rive ut bokhyller uten å se hva som står på dem – det går sjelden bra.
+### 4. Deploy commands
+```bash
+npm run load
+```
 
----
+### 5. Start boten
+```bash
+npm start
+```
+
+## Struktur
+
+```
+/commands/utils     -> Slash commands
+/events             -> Event handlers
+/data               -> Datalagring
+deploy-commands.js  -> Registrerer commands (fra dokumentasjon)
+index.js            -> Startfil (fra dokumentasjon)
+```
+
+
+## Workflow
+
+- Ikke bruk ```git push --force``` på main eller delte branches
+- Dersom du har problemer med push etter at du har kjørt ```git commit``` kan du prøve:
+  ```bash
+  git reset --soft origin/main #bytt ut main med relevant branch
+  ```
+- Splitt opp commits i gunstige deler og skriv tydelige, men korte commitmessages
+## Lisens
+
+Prosjektet er lisensiert under MIT-lisensen (se LICENSE).
