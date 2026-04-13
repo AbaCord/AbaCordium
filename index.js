@@ -1,7 +1,7 @@
 // Require the necessary discord.js classes
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, Events, GatewayIntentBits, MessageFlags, Partials } = require('discord.js');
+const { Client, Collection, Events, GatewayIntentBits, MessageFlags, Partials, MessageCreate } = require('discord.js');
 
 //Sette opp ENV
 const dotenv = require('dotenv');
@@ -13,12 +13,12 @@ const discordToken = process.env.DISCORD_TOKEN;
 
 // Create a new client instance med riktige permissions
 const client = new Client({
-  intents: Object.values(GatewayIntentBits), // Yay <:)
-  partials: [
-    Partials.Message,
-    Partials.Channel,
-    Partials.Reaction
-  ]
+	intents: Object.values(GatewayIntentBits), // Yay <:)
+	partials: [
+		Partials.Message,
+		Partials.Channel,
+		Partials.Reaction
+	]
 });
 
 
@@ -51,12 +51,12 @@ const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
 for (const file of eventFiles) {
-  const event = require(path.join(eventsPath, file));
-  if (event.once) {
-    client.once(event.name, (...args) => event.execute(...args, client));
-  } else {
-    client.on(event.name, (...args) => event.execute(...args, client));
-  }
+	const event = require(path.join(eventsPath, file));
+	if (event.once) {
+		client.once(event.name, (...args) => event.execute(...args, client));
+	} else {
+		client.on(event.name, (...args) => event.execute(...args, client));
+	}
 }
 
 // When the client is ready, run this code (only once).

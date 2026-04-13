@@ -15,12 +15,12 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('magicball')
         .setDescription('Get a random Magic 8-Ball answer!'),
-    
+
     async execute(interaction) {
         // Delete the user's slash command message (works in guilds)
         if (interaction.channel) {
             const fetched = await interaction.channel.messages.fetch(interaction.id).catch(() => null);
-            if (fetched) fetched.delete().catch(() => {});
+            if (fetched) fetched.delete().catch(() => { });
         }
 
         // Pick a random answer
