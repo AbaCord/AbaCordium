@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { getData } = require('../../events/birthdayEvent.js')
+const { getData, setData } = require('../../events/birthdayEvent.js')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -48,7 +48,7 @@ module.exports = {
 
     bdData[month + day].push(interaction.user);
 
-
+    setData(bdData);
 
     return interaction.reply({
       content: 'Birthday added to database',

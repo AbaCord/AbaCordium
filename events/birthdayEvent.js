@@ -2,12 +2,9 @@ const fs = require("fs");
 const path = require("path");
 const cron = require('node-cron');
 let birthdayData;
+let tempDate;
+let channel;
 
-
-// Set default timezone
-dayjs.tz.setDefault("Europe/Oslo");
-
-const dayjsToDiscord = (date, format = "F") => `<t:${Math.floor(date.valueOf() / 1000)}:${format}>`;
 
 const channelId = "1493182992263417856";
 const filePath = path.resolve(__dirname, "../data/birthdays.json");
@@ -39,8 +36,36 @@ async function getData() {
     return birthdayData;
 }
 
-cron.schedule('0 9 * * *', () => {
-    console.log('Running daily task');
+async function setData(birthdayData2) {
+    birthdayData = birthdayData2;
+    saveBirthdays();
+}
+
+async function saveBirthdays() {
+
+    try {
+        await writeJSONToFile(filePath, JSON.stringify(birthdayData, null, 2));
+        alert("File saved successfully!");
+    } catch (error) {
+        console.error("Error saving file:", error);
+    }
+
+
+}
+
+cron.schedule('30 16 * * *', () => {
+    try {
+        console.log('Running daily birthday check');
+        tempDate = new Date();
+        birthdayData[
+            String(tempDate.getDate).padStart(2, '0') +
+            String(tempDate.getMonth).padStart(2, '0')
+        ].array.forEach(element => {
+            channel.send(`Gratulerer med dagen <@${element}>`);
+        })
+    } catch (error) {
+        console.error("Error with daily bd check:", error);
+    }
 });
 
 module.exports = {
@@ -48,10 +73,14 @@ module.exports = {
     once: true,
     async execute(client) {
         try {
+
             console.log(`Logged in as ${client.user.tag}`);
+            loadBirthdays();
+            channel = await client.channels.fetch(channelId).catch(() => null);
+
         } catch (e) {
             console.error(e);
         }
     },
-    getData,
+    getData, setData,
 };
