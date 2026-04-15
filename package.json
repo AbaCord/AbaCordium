@@ -1,13 +1,15 @@
 {
-  "name": "abacordium-bot",
+  "name": "abacordium",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "load": "node deploy-commands.js"
   },
   "dependencies": {
     "dayjs": "^1.11.18",
     "discord.js": "^14.22.1",
-    "dotenv": "^17.2.2"
+    "dotenv": "^17.2.2",
+    "node-cron": "^4.2.1"
   }
 }
