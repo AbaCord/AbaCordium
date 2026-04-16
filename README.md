@@ -64,12 +64,10 @@ index.js            -> Startfil (fra dokumentasjon)
 
 ## Workflow
 
-- Ikke bruk ```git push --force``` på main eller delte branches
-- Dersom du har problemer med push etter at du har kjørt ```git commit``` kan du prøve:
-  ```bash
-  git reset --soft origin/main #bytt ut main med relevant branch
-  ```
+- Main er låst, og skal kun endres via merges med andre branches
+- Ikke bruk ```git push --force``` på delte branches
 - Splitt opp commits i gunstige deler og skriv tydelige, men korte commitmessages
+
 ## Lisens
 
 Prosjektet er lisensiert under MIT-lisensen (se LICENSE).
