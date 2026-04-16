@@ -30,8 +30,14 @@ module.exports = {
         .setMaxValue(31)
     ),
   async execute(interaction) {
-    let day = interaction.options.getNumber("day")
-    let month = interaction.options.getNumber("month")
+    const uId = interaction.user.id;
+
+    let sendContent = "Added birtday for " + uId + ", date: ";
+
+    let day = interaction.options.getNumber("day");
+    let month = interaction.options.getString("month");
+
+    sendContent = sendContent + day + "/" + month;
 
     if (!validDate(day, month)) {
       return interaction.reply({
@@ -42,11 +48,19 @@ module.exports = {
     day = String(day).padStart(2, '0');
     bdData = getData();
 
-    if (!bdData[month + day]) {
-      bdData[month + day] = new Array();
+    if (!bdData.dates[month + day]) {
+      bdData.dates[month + day] = new Array();
     }
 
-    bdData[month + day].push(interaction.user);
+
+    if (bdData.users[uId]) {
+      const oldDate = bdData.users[uId];
+      bdData.dates[oldDate].pop(uId)
+      sendContent = sendContent + ", removed old date: " + oldDate;
+    }
+
+    bdData.users["uId"] = month + day;
+    bdData.dates[month + day].push(uId);
 
     setData(bdData);
 
