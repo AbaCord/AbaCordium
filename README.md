@@ -73,11 +73,13 @@ index.js            -> Mainfile (from docs)
 
 ### Rebase into main
 
-When you are done developing you can rebase and merge your branch into main, try to avoid changing existing files in branches you do development as it will cause merge conflicts.
+When you are done developing you can rebase and then merge your branch into main, try to avoid changing existing files in branches you do development as it will cause merge conflicts.
+
 ```bash
 git rebase main
 git checkout main
 git merge {your_branch}
+git push
 ``
 
 ## Lisens
