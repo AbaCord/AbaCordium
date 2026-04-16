@@ -32,7 +32,7 @@ module.exports = {
   async execute(interaction) {
     const uId = interaction.user.id;
 
-    let sendContent = "Added birtday for " + uId + ", date: ";
+    let sendContent = "Added birtday for " + `<@${uId}>` + ", date: ";
 
     let day = interaction.options.getNumber("day");
     let month = interaction.options.getString("month");
@@ -46,26 +46,27 @@ module.exports = {
     }
 
     day = String(day).padStart(2, '0');
-    bdData = getData();
+    bdData = await getData();
 
     if (!bdData.dates[month + day]) {
+      console.log("Date not registered, creating...")
       bdData.dates[month + day] = new Array();
     }
 
-
     if (bdData.users[uId]) {
       const oldDate = bdData.users[uId];
-      bdData.dates[oldDate].pop(uId)
-      sendContent = sendContent + ", removed old date: " + oldDate;
+      const index = bdData.dates[oldDate].indexOf[oldDate]
+      bdData.dates[oldDate].splice(index, 1)
+      sendContent = sendContent + ", removed old date index: " + oldDate;
     }
 
-    bdData.users["uId"] = month + day;
+    bdData.users[uId] = month + day;
     bdData.dates[month + day].push(uId);
 
     setData(bdData);
 
     return interaction.reply({
-      content: 'Birthday added to database',
+      content: sendContent
     }).catch(() => { });
   }
 };

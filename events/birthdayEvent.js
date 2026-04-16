@@ -16,6 +16,8 @@ async function checkFileExists() {
 
         try {
             await fs.access(filePath);
+            JSON.parse(await fs.readFile(filePath, "utf-8"));
+
         } catch {
             await fs.writeFile(
                 filePath,
@@ -38,7 +40,7 @@ async function checkFileExists() {
 async function loadBirthdays() {
     try {
         await checkFileExists();
-        birthdayData = JSON.parse(await fs.readFile(filePath, "utf-8"));
+        birthdayData = await JSON.parse(await fs.readFile(filePath, "utf-8"));
     } catch (err) {
         console.error("Error loading birthdays:", err);
         birthdayData = {};
@@ -46,16 +48,12 @@ async function loadBirthdays() {
 }
 
 async function getData() {
-    if (birthdayData) {
-        console.error("Birthday data not loaded!")
-        return false;
-    }
     return birthdayData;
 }
 
 async function setData(birthdayData2) {
     birthdayData = birthdayData2;
-    saveBirthdays();
+    await saveBirthdays();
 }
 
 async function saveBirthdays() {
@@ -67,7 +65,7 @@ async function saveBirthdays() {
     };
 }
 
-cron.schedule('59 9 * * *', () => {
+cron.schedule('11 11 * * *', () => {
     try {
         console.log('Running daily birthday check');
         tempDate = new Date();
