@@ -7,19 +7,22 @@ import {
 } from "discord.js";
 
 const WORLDE_CHANNEL_ID = "1438506264991760464";
+const WORLDE_CHANNEL_ID_FIRST_MESSAGE_ID = "1438598873068339291"; // la meg starte denne kanalen med å mogge med dagens wordle
 
 const USER_REGEX = /<@!?(\d+)>/g;
 const SCORE_REGEX = /(\d|X)\/6/;
 
-async function fetchAllMessages(channel, limit = 5000) {
+async function fetchAllMessages(channel, limit = 5000, lastId = undefined) {
 	const messages = [];
-	let lastId;
+	let currentId = lastId;
 
 	while (messages.length < limit) {
 		const fetched = await channel.messages.fetch({
 			limit: Math.min(100, limit - messages.length),
-			before: lastId,
+			after: currentId,
 		});
+
+		channel.messages.fetch();
 
 		if (!fetched.size) break;
 
@@ -33,13 +36,9 @@ async function fetchAllMessages(channel, limit = 5000) {
 function buildRankList(entries) {
 	const medals = ["🥇", "🥈", "🥉"];
 
-	const top3 = entries
-		.slice(0, 3)
-		.map(([id, count], i) => `${medals[i]} <@${id}> — **${count}**`);
+	const top3 = entries.slice(0, 3).map(([id, count], i) => `${medals[i]} <@${id}> — **${count}**`);
 
-	const rest = entries
-		.slice(3)
-		.map(([id, count], i) => `${i + 4}. <@${id}> — **${count}**`);
+	const rest = entries.slice(3).map(([id, count], i) => `${i + 4}. <@${id}> — **${count}**`);
 
 	return [...top3, "", ...rest].join("\n");
 }
@@ -63,9 +62,7 @@ export const data = new SlashCommandBuilder()
 		sub
 			.setName("user")
 			.setDescription("Wordle stats av en bruker")
-			.addUserOption((opt) =>
-				opt.setName("target").setDescription("Bruker").setRequired(true),
-			),
+			.addUserOption((opt) => opt.setName("target").setDescription("Bruker").setRequired(true)),
 	);
 
 export async function execute(interaction) {
@@ -73,7 +70,7 @@ export async function execute(interaction) {
 	const channel = await interaction.client.channels.fetch(WORLDE_CHANNEL_ID);
 
 	if (!channel?.isTextBased()) {
-		return interaction.reply({ content: "Ugyldig kanal.", ephemeral: true });
+		return interaction.reply({content: "Ugyldig kanal.", ephemeral: true});
 	}
 
 	await interaction.deferReply();
@@ -95,12 +92,12 @@ export async function execute(interaction) {
 
 	const playerStats = {};
 
-	let number = 1
+	let number = 1;
 
 	for (const msg of worldeMessages) {
 		const lines = msg.content.split("\n");
 
-		interaction.editReply(number.toString())
+		interaction.editReply(number.toString());
 		number++;
 
 		for (const line of lines) {
@@ -133,9 +130,7 @@ export async function execute(interaction) {
 	console.log(playerStats);
 
 	if (sub === "leaderboard") {
-
 	}
-		
 
 	return interaction.editReply("Finished thinking");
 }
