@@ -1,68 +1,78 @@
 // Require the necessary discord.js classes
-const fs = require('node:fs');
-const path = require('node:path');
-const { Client, Collection, Events, GatewayIntentBits, MessageFlags, Partials, MessageCreate } = require('discord.js');
+const fs = require("node:fs");
+const path = require("node:path");
+const {
+	Client,
+	Collection,
+	Events,
+	GatewayIntentBits,
+	MessageFlags,
+	Partials,
+	MessageCreate,
+} = require("discord.js");
 
 //Sette opp ENV
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 dotenv.config();
 
 // DISCORD TOKEN
 const discordToken = process.env.DISCORD_TOKEN;
 
-
 // Create a new client instance med riktige permissions
 const client = new Client({
 	intents: Object.values(GatewayIntentBits), // Yay <:)
-	partials: [
-		Partials.Message,
-		Partials.Channel,
-		Partials.Reaction
-	]
+	partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
-
-
-
 
 //dynamisk retrival av command files
 
 client.commands = new Collection();
-const foldersPath = path.join(__dirname, 'commands');
+const foldersPath = path.join(__dirname, "commands");
 const commandFolders = fs.readdirSync(foldersPath);
 
 for (const folder of commandFolders) {
 	const commandsPath = path.join(foldersPath, folder);
-	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+	const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith(".js"));
 	for (const file of commandFiles) {
 		const filePath = path.join(commandsPath, file);
 		const command = require(filePath);
 		// Set a new item in the Collection with the key as the command name and the value as the exported module
-		if ('data' in command && 'execute' in command) {
+		if ("data" in command && "execute" in command) {
 			client.commands.set(command.data.name, command);
 		} else {
-			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+			console.log(
+				`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`,
+			);
 		}
 	}
 }
 
-//dynamisk retrival av event files aka en listener akkurat nå 
+//dynamisk retrival av event files aka en listener akkurat nå
 
-const eventsPath = path.join(__dirname, 'events');
-const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+const events_names = process.env.EVENTSLIST; // TODO: implementere filter for hvilke events som skal kjøres, for å unngå at alt kjøres i testmiljøer
 
-for (const file of eventFiles) {
-	const event = require(path.join(eventsPath, file));
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args, client));
-	} else {
-		client.on(event.name, (...args) => event.execute(...args, client));
+if (events_names !== "0" && events_names !== "false") {
+	// Sjekker om eventslyttere skal kjøres. Hvis verdien er "0" eller "false" kjøres de ikke, ellers kjøres de, inkludert når EVENTSLIST er undefined, null eller andre falsy verdier som ikke er "0" eller "false"
+
+	console.log("Events is running");
+
+	const eventsPath = path.join(__dirname, "events");
+	const eventFiles = fs.readdirSync(eventsPath).filter((file) => file.endsWith(".js"));
+
+	for (const file of eventFiles) {
+		const event = require(path.join(eventsPath, file));
+		if (event.once) {
+			client.once(event.name, (...args) => event.execute(...args, client));
+		} else {
+			client.on(event.name, (...args) => event.execute(...args, client));
+		}
 	}
 }
 
 // When the client is ready, run this code (only once).
 // The distinction between `client: Client<boolean>` and `readyClient: Client<true>` is important for TypeScript developers.
 // It makes some properties non-nullable.
-client.once(Events.ClientReady, readyClient => {
+client.once(Events.ClientReady, (readyClient) => {
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
 
@@ -70,7 +80,7 @@ client.once(Events.ClientReady, readyClient => {
 client.login(discordToken);
 
 //Listener for instructions, aka så lytter den etter når noe skal utføres, har også error catching i tilfelle kristoffer gjør noe
-client.on(Events.InteractionCreate, async interaction => {
+client.on(Events.InteractionCreate, async (interaction) => {
 	if (!interaction.isChatInputCommand()) return;
 
 	const command = interaction.client.commands.get(interaction.commandName);
@@ -85,9 +95,15 @@ client.on(Events.InteractionCreate, async interaction => {
 	} catch (error) {
 		console.error(error);
 		if (interaction.replied || interaction.deferred) {
-			await interaction.followUp({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
+			await interaction.followUp({
+				content: "There was an error while executing this command!",
+				flags: MessageFlags.Ephemeral,
+			});
 		} else {
-			await interaction.reply({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
+			await interaction.reply({
+				content: "There was an error while executing this command!",
+				flags: MessageFlags.Ephemeral,
+			});
 		}
 	}
 });
