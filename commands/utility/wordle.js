@@ -11,8 +11,13 @@ const WORLDE_CHANNEL_ID_FIRST_MESSAGE_ID = "1438598873068339291"; // la meg star
 
 const USER_REGEX = /<@!?(\d+)>/g;
 const SCORE_REGEX = /(\d|X)\/6/;
+const CACHE = {};
 
-async function fetchAllMessages(channel, limit = 5000, lastId = undefined) {
+async function fetchAllMessages(
+	channel,
+	limit = 5000,
+	lastId = WORLDE_CHANNEL_ID_FIRST_MESSAGE_ID,
+) {
 	const messages = [];
 	let currentId = lastId;
 
@@ -21,26 +26,11 @@ async function fetchAllMessages(channel, limit = 5000, lastId = undefined) {
 			limit: Math.min(100, limit - messages.length),
 			after: currentId,
 		});
-
-		channel.messages.fetch();
-
 		if (!fetched.size) break;
-
 		messages.push(...fetched.values());
-		lastId = fetched.last().id;
+		currentId = fetched.first().id;
 	}
-
 	return messages;
-}
-
-function buildRankList(entries) {
-	const medals = ["🥇", "🥈", "🥉"];
-
-	const top3 = entries.slice(0, 3).map(([id, count], i) => `${medals[i]} <@${id}> — **${count}**`);
-
-	const rest = entries.slice(3).map(([id, count], i) => `${i + 4}. <@${id}> — **${count}**`);
-
-	return [...top3, "", ...rest].join("\n");
 }
 
 export const data = new SlashCommandBuilder()
@@ -75,10 +65,10 @@ export async function execute(interaction) {
 
 	await interaction.deferReply();
 
-	const messages = await fetchAllMessages(channel);
+	const messages = await fetchAllMessages(channel, 500);
 	const year = interaction.options.getInteger("year");
 
-	const worldeMessages = messages.filter((msg) => {
+	const filteredMessages = messages.filter((msg) => {
 		return (
 			msg.author.id === "1211781489931452447" &&
 			msg.content.startsWith("**Your group") &&
@@ -86,23 +76,43 @@ export async function execute(interaction) {
 		);
 	});
 
-	if (!worldeMessages.length) {
+	if (!filteredMessages.length) {
 		return interaction.editReply("Fant ingen worlde games");
 	}
 
-	const playerStats = {};
+	const sortedMessages = filteredMessages.sort((a, b) => a.createdTimestamp - b.createdTimestamp);
+
+	const worldeMessages = filteredMessages.map((m) => m.content);
+
+	const playerStats = {
+		currentDay: 0,
+		lastMessageId: sortedMessages[sortedMessages.length - 1].id,
+	};
 
 	let number = 1;
 
 	for (const msg of worldeMessages) {
 		const lines = msg.content.split("\n");
 
-		interaction.editReply(number.toString());
-		number++;
+		const firstLine =lines.shift();
+
+		const dayMatch = /Your group has completed Worlde #(\d+)/.exec(firstLine);
+
+		if (!dayMatch) {
+			continue;
+		}
+
+		const day = parseInt(dayMatch[1]);
+
+		console.log(day)
 
 		for (const line of lines) {
+			
 			const scoreMatch = SCORE_REGEX.exec(line);
-			if (!scoreMatch) continue;
+
+			if (!scoreMatch) {
+				continue;
+			};
 
 			SCORE_REGEX.lastIndex = 0;
 
