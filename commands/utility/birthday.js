@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
-const { getData, setData } = require("../../events/birthdayEvent.js");
+const { getData, setData } = require("../../events/birthdayManager.js");
 
 module.exports = {
   data: new SlashCommandBuilder()

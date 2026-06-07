@@ -1,7 +1,7 @@
 const fs = require("fs").promises;
 const path = require("path");
 const cron = require("node-cron");
-const { getData } = require("./birthdayEvent.js");
+const { getData } = require("./birthdayManager.js");
 
 const channelId = "1493182992263417856"; // currently testchannel in abarkiv
 
