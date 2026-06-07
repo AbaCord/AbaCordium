@@ -18,7 +18,7 @@ let birthdayMessages = [
   "<userID> har runda enda et år — gratulerer!",
 ];
 
-cron.schedule("* * * * *", async () => {
+cron.schedule("0 10 * * *", async () => {
   try {
     console.log("Running daily birthday check");
 
