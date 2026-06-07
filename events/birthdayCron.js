@@ -1,25 +1,42 @@
-const fs = require("fs").promises;
-const path = require("path");
 const cron = require("node-cron");
 const { getData } = require("./birthdayManager.js");
 
-const channelId = "1493182992263417856"; // currently testchannel in abarkiv
+const channelId = "1513309366910976061"; // "bursdagskanal"
 
-let tempDate;
 let channel;
+let birthdayText;
 
-cron.schedule("11 11 * * *", () => {
+let birthdayMessages = [
+  "Se hvem som har bursdag! Gratulerer, <userID>!",
+  "Den ene og eneste <userID> har bursdag i dag! 🎉",
+  "Gratulerer med dagen, <userID> — håper den blir bra!",
+  "✨ <userID> har bursdag — ett år klokere!",
+  "🎉 Gratulerer med dagen, <userID> — ta vare på dagen din.",
+  "🔥 <userID> har levd enda et år — gratulerer med dagen!",
+  "🎈 Stor dag for <userID> — gratulerer med dagen!",
+  "Gratulerer med dagen, <userID> — gjør den god!",
+  "<userID> har runda enda et år — gratulerer!",
+];
+
+cron.schedule("* * * * *", async () => {
   try {
     console.log("Running daily birthday check");
-    tempDate = new Date();
+
+    const tempDate = new Date();
+    const bdData = await getData();
 
     const list =
-      getData().dates[
+      bdData.dates[
         String(tempDate.getMonth() + 1).padStart(2, "0") +
           String(tempDate.getDate()).padStart(2, "0")
       ] || [];
+
     list.forEach((element) => {
-      channel.send(`Gratulerer med dagen <@${element}>`);
+      const birthdayText = birthdayMessages[
+        Math.floor(Math.random() * birthdayMessages.length)
+      ].replace("<userID>", `<@${element}>`);
+
+      channel.send(birthdayText);
     });
   } catch (error) {
     console.error("Error with daily bd check:", error);

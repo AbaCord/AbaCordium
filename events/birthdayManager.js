@@ -3,9 +3,7 @@ const path = require("path");
 
 let birthdayData;
 let tempDate;
-let channel;
 
-const channelId = "1493182992263417856"; // currently testchannel in abarkiv
 const filePath = path.resolve(__dirname, "../data/private/birthdays.json");
 
 async function checkFileExists() {
@@ -67,7 +65,6 @@ module.exports = {
   async execute(client) {
     try {
       loadBirthdays();
-      channel = await client.channels.fetch(channelId).catch(() => null);
       console.log("Loaded birthdays");
     } catch (e) {
       console.error(e);
