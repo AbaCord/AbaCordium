@@ -7,17 +7,6 @@ module.exports = {
     .setDescription("Edit birthdays")
     .addSubcommand((subcommand) =>
       subcommand
-        .setName("remove")
-        .setDescription("Remove birthday")
-        .addUserOption((option) =>
-          option
-            .setName("target")
-            .setDescription("Target user")
-            .setRequired(false),
-        ),
-    )
-    .addSubcommand((subcommand) =>
-      subcommand
         .setName("set")
         .setDescription("Set birthday")
         .addStringOption((option) =>
@@ -54,6 +43,17 @@ module.exports = {
             .setDescription("Taret user")
             .setRequired(false),
         ),
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("remove")
+        .setDescription("Remove birthday")
+        .addUserOption((option) =>
+          option
+            .setName("target")
+            .setDescription("Target user")
+            .setRequired(false),
+        ),
     ),
   async execute(interaction) {
     let uId = interaction.user.id;
@@ -88,12 +88,16 @@ module.exports = {
       try {
         if (bdData.users[uId]) {
           const date = bdData.users[uId];
-          const index = bdData.dates[oldDate].indexOf[oldDate];
-          bdData.dates[oldDate].pop(index);
-          bdData.users.remove(uId);
-          sendContent = sendContent + ", removed old date index: " + oldDate;
+
+          const index = bdData.dates[date].indexOf(uId);
+          if (index !== -1) {
+            bdData.dates[date].splice(index, 1);
+          }
+
+          delete bdData.users[uId];
         }
-      } catch {
+      } catch (e) {
+        console.error(e);
         return interaction
           .reply({
             content: `<@${uId}>` + " has not registered a birthdate!",
