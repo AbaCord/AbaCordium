@@ -1,0 +1,75 @@
+const fs = require("fs").promises;
+const path = require("path");
+
+let birthdayData;
+let tempDate;
+
+const filePath = path.resolve(__dirname, "../data/private/birthdays.json");
+
+async function checkFileExists() {
+  try {
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
+
+    try {
+      await fs.access(filePath);
+      JSON.parse(await fs.readFile(filePath, "utf-8"));
+    } catch {
+      await fs.writeFile(
+        filePath,
+        JSON.stringify(
+          {
+            users: {},
+            dates: {},
+          },
+          null,
+          2,
+        ),
+        "utf-8",
+      );
+    }
+  } catch (err) {
+    console.error("Error ensuring file exists:", err);
+  }
+}
+
+async function loadBirthdays() {
+  try {
+    await checkFileExists();
+    birthdayData = await JSON.parse(await fs.readFile(filePath, "utf-8"));
+  } catch (err) {
+    console.error("Error loading birthdays:", err);
+    birthdayData = {};
+  }
+}
+
+async function getData() {
+  return birthdayData;
+}
+
+async function setData(birthdayData2) {
+  birthdayData = birthdayData2;
+  await saveBirthdays();
+}
+
+async function saveBirthdays() {
+  try {
+    fs.writeFile(filePath, JSON.stringify(birthdayData));
+  } catch (err) {
+    console.error("Error saving file:", err);
+  }
+}
+
+module.exports = {
+  name: "clientReady",
+  once: true,
+  async execute(client) {
+    try {
+      loadBirthdays();
+      console.log("Loaded birthdays");
+    } catch (e) {
+      console.error(e);
+    }
+  },
+  getData,
+  setData,
+};
