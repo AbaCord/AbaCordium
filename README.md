@@ -34,8 +34,7 @@ GUILDID={test_server_id}
 ### 4. Install dependencies, commands and start the bot
 ```bash
 npm install # Installs from package.json
-npm run load # Runs deploy-commands.js
-npm start # Runs index.js
+npm start # Runs deploy-commands.js and then index.js
 ```
 
 ## Developer guide
@@ -45,8 +44,7 @@ npm start # Runs index.js
 Main is locked and should only be altered by merging with a branch, before making changes to the code make a branch with a name appropriate to the feature you are making:
 
 ```bash
-git branch {your_branch}
-git checkout {your_branch}
+git checkout -b {your_branch}
 ```
 
 ### Make sensible commits
@@ -80,7 +78,7 @@ git rebase main
 git checkout main
 git merge {your_branch}
 git push
-``
+```
 
 ## Lisens
 
