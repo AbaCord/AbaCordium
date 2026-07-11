@@ -1,7 +1,7 @@
 const cron = require("node-cron");
 const { getData } = require("./birthdayManager.js");
 
-const channelId = "1513309366910976061"; // "bursdagskanal"
+const channelId = "1404930417664196648"; // "general"
 
 let channel;
 let birthdayText;
