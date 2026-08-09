@@ -70,8 +70,8 @@ async function updateYearRoles(guild) {
 
     for (const member of members.values()) {
       try {
-        await member.roles.remove(currentRole);
         await member.roles.add(nextRole);
+        await member.roles.remove(currentRole);
 
         updated++;
       } catch (error) {
