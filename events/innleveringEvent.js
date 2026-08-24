@@ -6,6 +6,7 @@ const {
 	ButtonBuilder,
 	ButtonStyle,
 	ContainerBuilder,
+	SeparatorBuilder,
 } = require("discord.js");
 
 const dayjs = require("dayjs");
@@ -24,165 +25,162 @@ const dayjsToDiscord = (date, format = "F") => `<t:${Math.floor(date.valueOf() /
 
 const channelId = "1418137268270399558";
 const messageId = "1421186681305956362";
-const filePath = path.resolve(__dirname, "../data/innleveringer.json");
+const filePath = "../data/innleveringer.json";
+
+async function getInnleveringer(filePath) {
+	const file = path.resolve(__dirname, filePath);
+
+	if (!fs.existsSync(file)) {
+		console.error("File does not exist");
+		return null;
+	}
+
+	try {
+		const fileData = fs.readFileSync(file, "utf-8");
+		return JSON.parse(fileData);
+	} catch (e) {
+		console.error("Could not parse file", e);
+		return null;
+	}
+}
+
+async function getMessage(client, messageId, channelId) {
+	try {
+		const channel = await client.channels.fetch(channelId);
+		const message = await channel.messages.fetch(messageId);
+		return message;
+	} catch (e) {
+		console.error("Could not fetch message", e);
+		return null;
+	}
+}
+
+async function buildMessage(data) {
+	const container = new ContainerBuilder();
+	const now = dayjs();
+
+	for (const kode in data) {
+		try {
+			const emne = data[kode];
+			const type = emne.type;
+
+			const header = new TextDisplayBuilder().setContent(`# ${kode}: ${emne.navn}`);
+
+			container.addTextDisplayComponents(header);
+
+			for (const typeObj in type)
+				try {
+					const info = type[typeObj];
+
+					for (const item of info) {
+						try {
+							const fristRaw = item.frist;
+							let frist = dayjs(fristRaw, "DD-MM-YYYY", true);
+
+							let hours = 0;
+							let minutes = 0;
+
+							const parts = item.kl.split(":").map(Number);
+
+							if (parts.length === 2) {
+								hours = parts[0];
+								minutes = parts[1];
+							}
+
+							frist = frist.add(hours, "hour").add(minutes, "minute");
+
+							if (!now.isBefore(frist) || now.add(4, "week").isBefore(frist)) {
+								continue;
+							}
+
+							const text = new TextDisplayBuilder().setContent(`
+								### **${typeObj.toUpperCase()} ${item.nummer ? item.nummer : ""}**
+								${frist.format("D. MMM HH:mm")} - ${dayjsToDiscord(frist, "R")}
+								`,
+							);
+
+							const link = item.link;
+
+							const button = new ButtonBuilder().setLabel("link").setStyle(ButtonStyle.Link);
+
+							if (typeof link === "string" && (link.startsWith("http://") || link.startsWith("https://"))) {
+								button.setURL(link);
+							} else {
+								button.setURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+							}
+							
+							const section = new SectionBuilder()
+								.addTextDisplayComponents(text)
+							  .setButtonAccessory(button);
+
+							container.addSectionComponents(section);
+							break;
+
+						} catch (e) {
+							console.error(`Error processing item for ${kode} - ${typeObj}:`, e);
+							return null;
+						}
+					}
+				} catch (e) {
+					console.error(`Error processing type for ${kode} - ${typeObj}:`, e);
+					return null;
+				}
+
+				container.addSeparatorComponents(new SeparatorBuilder());
+		} catch (e) {
+			console.error(`Error processing kode ${kode}:`, e);
+			return null;
+		}
+	}
+	return container;
+}
 
 async function updateMessage(client, messageId, channelId, filePath) {
+	console.log("Updating message: Innlevering");
 	try {
-		let channel;
+		const message = await getMessage(client, messageId, channelId);
 
-		try {
-			channel = await client.channels.fetch(channelId);
-		} catch (e) {
-			console.error(e);
+		if (!message) {
+			console.error("Message not found");
 			return;
 		}
 
-		if (!fs.existsSync(filePath)) {
-			console.error("File does not exist");
+		const data = await getInnleveringer(filePath);
+
+		if (!data) {
+			console.error("Data not found");
 			return;
 		}
 
-		const fileData = fs.readFileSync(filePath, "utf-8");
-		let data;
+		const container = await buildMessage(data);
 
-		try {
-			data = JSON.parse(fileData);
-		} catch (e) {
-			console.error("Could not Pare file", e);
+		if (!container) {
+			console.error("Container not built");
 			return;
-		}
-
-		let message;
-
-		try {
-			message = await channel.messages.fetch(messageId);
-		} catch (e) {
-			console.error("Could not fetch message", e);
-			return;
-		}
-
-		// Bygger melding
-
-		const container = new ContainerBuilder();
-
-		for (const kode in data) {
-			try {
-				const emne = data[kode];
-				const type = emne.type;
-
-				const header = new TextDisplayBuilder().setContent(`### ${kode}: ${emne.navn}`);
-
-				container.addTextDisplayComponents(header);
-
-				for (const typeObj in type)
-					try {
-						const info = type[typeObj];
-						const fristRaw = info.frist;
-						let frist = dayjs(fristRaw, "DD-MM-YYYY", true);
-
-						let hours = 0;
-						let minutes = 0;
-
-						const parts = info.kl.split(":").map(Number);
-
-						if (parts.length === 2) {
-							hours = parts[0];
-							minutes = parts[1];
-						} else {
-						}
-
-						frist = frist.add(hours, "hour").add(minutes, "minute");
-
-						const antall = info.antall;
-						const frekvens = info.frekvens;
-						const link = info.link;
-
-						let nummer = 1;
-						const now = dayjs();
-
-						// TDT4109
-						if (kode === "TDT4109") {
-							for (; nummer <= antall; nummer++) {
-								if (now.isAfter(frist)) {
-									try {
-										if (
-											(typeObj === "Demotrasjon" && (nummer === 2 || nummer === 5)) ||
-											(typeObj === "Øving" && (nummer === 3 || nummer === 6))
-										) {
-											frist = frist.add(frekvens * 7, "day");
-										}
-										frist = frist.add(frekvens * 7, "day");
-									} catch (e) {
-										console.error(e);
-										break;
-									}
-								} else {
-									break;
-								}
-							}
-						} else {
-							for (; nummer <= antall; nummer++) {
-								if (now.isAfter(frist)) {
-									try {
-										frist = frist.add(frekvens * 7, "day");
-									} catch (e) {
-										console.error(e);
-										break;
-									}
-								} else {
-									break;
-								}
-							}
-						}
-
-						if (now.isBefore(frist)) {
-							try {
-								const text = new TextDisplayBuilder().setContent(
-									`${kode}: **${typeObj.toUpperCase()} ${nummer}**`
-								);
-								const deadline = new TextDisplayBuilder().setContent(
-									`Frist: ${frist.format("D. MMM HH:mm")} - ${dayjsToDiscord(frist, "R")}`
-								);
-
-								const button = new ButtonBuilder().setLabel("link").setStyle(ButtonStyle.Link);
-
-								if (link) {
-									button.setURL(link);
-								}
-
-								const section = new SectionBuilder()
-									.addTextDisplayComponents(text, deadline)
-									.setButtonAccessory(button);
-								container.addSectionComponents(section);
-							} catch (e) {
-								console.error(e);
-							}
-						}
-					} catch (e) {
-						console.error(e);
-					}
-			} catch (e) {console.error(e)}
 		}
 
 		try {
 			await message.edit({components: [container]});
 		} catch (e) {
-			console.error(e);
+			console.error(`Error editing message:`, e);
+		  return;
 		}
 	} catch (e) {
-		console.error(e);
+		console.error(`Error updating message:`, e);
 	}
 }
-
 
 module.exports = {
 	name: "clientReady",
 	once: true,
 	async execute(client) {
 		try {
-			setInterval(function() {updateMessage(client, messageId, channelId, filePath)}, 1000*3600);
+			updateMessage(client, messageId, channelId, filePath); // Call the function once when the bot starts
+			setInterval(function () {
+				updateMessage(client, messageId, channelId, filePath);
+			}, 1000 * 3600); // 3600 (1 hour)
 		} catch (e) {
-			console.error(e);
+			console.error(`Error in clientReady event:`, e);
 		}
 	},
 };

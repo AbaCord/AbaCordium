@@ -1,72 +1,327 @@
 {
-	"TMA4400": {
-		"navn": "Matematikk 1: Kalkulus og lineær algebra",
+	"IT1901": {
+		"navn": "Informatikk prosjektarbeid I",
 		"type": {
-			"stack": {
-				"frist": "02-09-2025",
-				"kl": "16:00",
-				"frekvens": 1,
-				"antall": 12,
-				"link": "https://stack.math.ntnu.no/course/view.php?id=48"
-			},
-			"ovsys": {
-				"frist": "12-09-2025",
-				"kl": "16:00",
-				"frekvens": 3,
-				"antall": 4,
-				"link": "https://ovsys.math.ntnu.no/student/TMA4400/2025H/"
-			}
+			"Individuell Oppgave": [
+				{
+					"frist": "02-09-2026",
+					"kl": "14:00",
+					"link": "https://canvas.ntnu.no/courses/25755/assignments",
+					"nummer": ""
+				}
+			],
+			"Gruppe Kontrakt": [
+				{
+					"frist": "09-09-2026",
+					"kl": "14:00",
+					"link": "https://canvas.ntnu.no/courses/25755/assignments",
+					"nummer": ""
+				}
+			],
+			"Gruppe Oppgave": [
+				{
+					"frist": "16-09-2026",
+					"kl": "14:00",
+					"link": "https://canvas.ntnu.no/courses/25755/assignments",
+					"nummer": "1"
+				},
+				{
+					"frist": "07-10-2026",
+					"kl": "14:00",
+					"link": "https://canvas.ntnu.no/courses/25755/assignments",
+					"nummer": "2"
+				},
+				{
+					"frist": "11-11-2026",
+					"kl": "14:00",
+					"link": "https://canvas.ntnu.no/courses/25755/assignments",
+					"nummer": "3"
+				}
+			],
+			"Individuell Refleksjon": [
+				{
+					"frist": "21-12-2026",
+					"kl": "14:00",
+					"link": "https://canvas.ntnu.no/courses/25755/assignments"
+				}
+			]
 		}
 	},
-	"TMA4412": {
-		"navn": "Matematikk 2C: Diskret matematikk",
+	"TDT4160": {
+		"navn": "Datamaskiner",
 		"type": {
-			"stack": {
-				"frist": "28-08-2025",
-				"kl": "17:00",
-				"frekvens": 2,
-				"antall": 7,
-				"link": "https://stack.math.ntnu.no/course/view.php?id=50"
-			},
-			"ovsys": {
-				"frist": "04-09-2025",
-				"kl": "17:00",
-				"frekvens": 2,
-				"antall": 6,
-				"link": "https://ovsys.math.ntnu.no/student/TMA4412/2025H/"
-			}
+			"Teoretisk Øving": [
+				{
+					"frist": "04-09-2026",
+					"kl": "16:00",
+					"link": "https://canvas.ntnu.no/courses/24542/assignments",
+					"nummer": "1"
+				},
+				{
+					"frist": "18-09-2026",
+					"kl": "16:00",
+					"link": "https://canvas.ntnu.no/courses/24542/assignments",
+					"nummer": "2"
+				},
+				{
+					"frist": "02-10-2026",
+					"kl": "16:00",
+					"link": "https://canvas.ntnu.no/courses/24542/assignments",
+					"nummer": "3"
+				},
+				{
+					"frist": "16-10-2026",
+					"kl": "16:00",
+					"link": "https://canvas.ntnu.no/courses/24542/assignments",
+					"nummer": "4"
+				},
+				{
+					"frist": "30-10-2026",
+					"kl": "16:00",
+					"link": "https://canvas.ntnu.no/courses/24542/assignments",
+					"nummer": "5"
+				},
+				{
+					"frist": "13-11-2026",
+					"kl": "16:00",
+					"link": "https://canvas.ntnu.no/courses/24542/assignments",
+					"nummer": "6"
+				}
+			],
+			"Praktisk Øving": [
+				{
+					"frist": "11-09-2026",
+					"kl": "16:00",
+					"link": "https://canvas.ntnu.no/courses/24542/assignments",
+					"nummer": "1"
+				},
+				{
+					"frist": "25-09-2026",
+					"kl": "16:00",
+					"link": "https://canvas.ntnu.no/courses/24542/assignments",
+					"nummer": "2"
+				},
+				{
+					"frist": "09-10-2026",
+					"kl": "16:00",
+					"link": "https://canvas.ntnu.no/courses/24542/assignments",
+					"nummer": "3"
+				},
+				{
+					"frist": "23-10-2026",
+					"kl": "16:00",
+					"link": "https://canvas.ntnu.no/courses/24542/assignments",
+					"nummer": "4"
+				},
+				{
+					"frist": "06-11-2026",
+					"kl": "16:00",
+					"link": "https://canvas.ntnu.no/courses/24542/assignments",
+					"nummer": "5"
+				}
+			]
 		}
 	},
-	"TDT4109": {
-		"navn": "Informasjonsteknologi, grunnkurs",
+	"TDT4120": {
+		"navn": "Algoritmer og datastrukturer",
 		"type": {
-			"Øving": {
-				"frist": "05-09-2025",
-				"kl": "23:59",
-				"frekvens": 1,
-				"antall": 8,
-				"link": "https://ntnu.blackboard.com/ultra/courses/_56340_1/cl/outline"
-			},
-			"Demotrasjon": {
-				"frist": "12-09-2025",
-				"kl": "14:00",
-				"frekvens": 1,
-				"antall": 8,
-				"link": "https://ntnu.blackboard.com/webapps/blackboard/content/listContent.jsp?course_id=_56340_1&content_id=_2843917_1&mode=reset"
-			}
+			"Øving": [
+				{
+					"frist": "10-09-2026",
+					"kl": "16:00",
+					"link": "",
+					"nummer": "1, 2A, 2B"
+				},
+				{
+					"frist": "17-09-2026",
+					"kl": "16:00",
+					"link": "",
+					"nummer": "3"
+				},
+				{
+					"frist": "24-09-2026",
+					"kl": "16:00",
+					"link": "",
+					"nummer": "4"
+				},
+				{
+					"frist": "01-10-2026",
+					"kl": "16:00",
+					"link": "",
+					"nummer": "5"
+				},
+				{
+					"frist": "08-10-2026",
+					"kl": "16:00",
+					"link": "",
+					"nummer": "6"
+				},
+				{
+					"frist": "15-10-2026",
+					"kl": "16:00",
+					"link": "",
+					"nummer": "7"
+				},
+				{
+					"frist": "22-10-2026",
+					"kl": "16:00",
+					"link": "",
+					"nummer": "8"
+				},
+				{
+					"frist": "29-10-2026",
+					"kl": "16:00",
+					"link": "",
+					"nummer": "9"
+				},
+				{
+					"frist": "05-11-2026",
+					"kl": "16:00",
+					"link": "",
+					"nummer": "10"
+				},
+				{
+					"frist": "12-11-2026",
+					"kl": "16:00",
+					"link": "",
+					"nummer": "11"
+				},
+				{
+					"frist": "19-11-2026",
+					"kl": "16:00",
+					"link": "",
+					"nummer": "12"
+				},
+        {
+					"frist": "23-11-2026",
+					"kl": "16:00",
+					"link": "",
+					"nummer": "13"
+				}
+			]
 		}
 	},
-	"EXPH0300": {
-		"navn": "Examen philosophicum for naturvitenskap og teknologi",
+	"TMA4240": {
+		"navn": "Statistikk",
 		"type": {
-			"Øvingoppgave": {
-				"frist": "13-10-2025",
-				"kl": "23:59",
-				"frekvens": 1,
-				"antall": 1,
-				"link": "https://ntnu.blackboard.com/ultra/courses/_53353_1/cl/outline"
-			}
+			"Elektronisk øving": [
+				{
+					"frist": "26-08-2026",
+					"kl": "21:00",
+					"link": "https://stack.math.ntnu.no/course/view.php?id=60",
+					"nummer": "1"
+				},
+				{
+					"frist": "02-09-2026",
+					"kl": "21:00",
+					"link": "https://stack.math.ntnu.no/course/view.php?id=60",
+					"nummer": "2"
+				},
+				{
+					"frist": "09-09-2026",
+					"kl": "21:00",
+					"link": "https://stack.math.ntnu.no/course/view.php?id=60",
+					"nummer": "3"
+				},
+				{
+					"frist": "16-09-2026",
+					"kl": "21:00",
+					"link": "https://stack.math.ntnu.no/course/view.php?id=60",
+					"nummer": "4"
+				},
+				{
+					"frist": "23-09-2026",
+					"kl": "21:00",
+					"link": "https://stack.math.ntnu.no/course/view.php?id=60",
+					"nummer": "5"
+				},
+				{
+					"frist": "30-09-2026",
+					"kl": "21:00",
+					"link": "https://stack.math.ntnu.no/course/view.php?id=60",
+					"nummer": "6"
+				},
+				{
+					"frist": "07-10-2026",
+					"kl": "21:00",
+					"link": "https://stack.math.ntnu.no/course/view.php?id=60",
+					"nummer": "7"
+				},
+				{
+					"frist": "14-10-2026",
+					"kl": "21:00",
+					"link": "https://stack.math.ntnu.no/course/view.php?id=60",
+					"nummer": "8"
+				},
+				{
+					"frist": "21-10-2026",
+					"kl": "21:00",
+					"link": "https://stack.math.ntnu.no/course/view.php?id=60",
+					"nummer": "9"
+				},
+				{
+					"frist": "28-10-2026",
+					"kl": "21:00",
+					"link": "https://stack.math.ntnu.no/course/view.php?id=60",
+					"nummer": "10"
+				},
+				{
+					"frist": "04-11-2026",
+					"kl": "21:00",
+					"link": "https://stack.math.ntnu.no/course/view.php?id=60",
+					"nummer": "11"
+				},
+				{
+					"frist": "11-11-2026",
+					"kl": "21:00",
+					"link": "https://stack.math.ntnu.no/course/view.php?id=60",
+					"nummer": "12"
+				},
+				{
+					"frist": "18-11-2026",
+					"kl": "21:00",
+					"link": "https://stack.math.ntnu.no/course/view.php?id=60",
+					"nummer": "13"
+				}
+			],
+			"Skriftlig innlevering": [
+				{
+					"frist": "02-09-2026",
+					"kl": "21:00",
+					"link": "https://ovsys.math.ntnu.no/student/TMA4240/2026H/",
+					"nummer": "1"
+				},
+				{
+					"frist": "16-09-2026",
+					"kl": "21:00",
+					"link": "https://ovsys.math.ntnu.no/student/TMA4240/2026H/",
+					"nummer": "2"
+				},
+				{
+					"frist": "07-10-2026",
+					"kl": "21:00",
+					"link": "https://ovsys.math.ntnu.no/student/TMA4240/2026H/",
+					"nummer": "3"
+				},
+				{
+					"frist": "21-10-2026",
+					"kl": "21:00",
+					"link": "https://ovsys.math.ntnu.no/student/TMA4240/2026H/",
+					"nummer": "4"
+				},
+				{
+					"frist": "04-11-2026",
+					"kl": "21:00",
+					"link": "https://ovsys.math.ntnu.no/student/TMA4240/2026H/",
+					"nummer": "5"
+				},
+				{
+					"frist": "18-11-2026",
+					"kl": "21:00",
+					"link": "https://ovsys.math.ntnu.no/student/TMA4240/2026H/",
+					"nummer": "6"
+				}
+			]
 		}
 	}
 }
-
