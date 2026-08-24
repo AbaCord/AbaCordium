@@ -175,6 +175,7 @@ module.exports = {
 	once: true,
 	async execute(client) {
 		try {
+			updateMessage(client, messageId, channelId, filePath); // Call the function once when the bot starts
 			setInterval(function () {
 				updateMessage(client, messageId, channelId, filePath);
 			}, 1000 * 3600); // 3600 (1 hour)
