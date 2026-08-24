@@ -6,6 +6,7 @@ const {
 	ButtonBuilder,
 	ButtonStyle,
 	ContainerBuilder,
+	SeparatorBuilder,
 } = require("discord.js");
 
 const dayjs = require("dayjs");
@@ -63,7 +64,7 @@ async function buildMessage(data) {
 			const emne = data[kode];
 			const type = emne.type;
 
-			const header = new TextDisplayBuilder().setContent(`### ${kode}: ${emne.navn}`);
+			const header = new TextDisplayBuilder().setContent(`# ${kode}: ${emne.navn}`);
 
 			container.addTextDisplayComponents(header);
 
@@ -79,7 +80,7 @@ async function buildMessage(data) {
 							let hours = 0;
 							let minutes = 0;
 
-							const parts = info.kl.split(":").map(Number);
+							const parts = item.kl.split(":").map(Number);
 
 							if (parts.length === 2) {
 								hours = parts[0];
@@ -88,41 +89,46 @@ async function buildMessage(data) {
 
 							frist = frist.add(hours, "hour").add(minutes, "minute");
 
-							if (!now.isBefore(frist)) {
+							if (!now.isBefore(frist) || now.add(4, "week").isBefore(frist)) {
 								continue;
 							}
 
-							const text = new TextDisplayBuilder().setContent(
-								`${kode}: **${typeObj.toUpperCase()} ${item.nummer ? item.nummer : ""}**`,
-							);
-
-							const deadline = new TextDisplayBuilder().setContent(
-								`Frist: ${frist.format("D. MMM HH:mm")} - ${dayjsToDiscord(frist, "R")}`,
+							const text = new TextDisplayBuilder().setContent(`
+								### **${typeObj.toUpperCase()} ${item.nummer ? item.nummer : ""}**
+								${frist.format("D. MMM HH:mm")} - ${dayjsToDiscord(frist, "R")}
+								`,
 							);
 
 							const link = item.link;
 
 							const button = new ButtonBuilder().setLabel("link").setStyle(ButtonStyle.Link);
 
-							if (link) {
+							if (typeof link === "string" && (link.startsWith("http://") || link.startsWith("https://"))) {
 								button.setURL(link);
+							} else {
+								button.setURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 							}
-
+							
 							const section = new SectionBuilder()
-								.addTextDisplayComponents(text, deadline)
-								.setButtonAccessory(button);
+								.addTextDisplayComponents(text)
+							  .setButtonAccessory(button);
+
 							container.addSectionComponents(section);
+							break;
+
 						} catch (e) {
-							console.error(e);
+							console.error(`Error processing item for ${kode} - ${typeObj}:`, e);
 							return null;
 						}
 					}
 				} catch (e) {
-					console.error(e);
+					console.error(`Error processing type for ${kode} - ${typeObj}:`, e);
 					return null;
 				}
+
+				container.addSeparatorComponents(new SeparatorBuilder());
 		} catch (e) {
-			console.error(e);
+			console.error(`Error processing kode ${kode}:`, e);
 			return null;
 		}
 	}
@@ -130,6 +136,7 @@ async function buildMessage(data) {
 }
 
 async function updateMessage(client, messageId, channelId, filePath) {
+	console.log("Updating message: Innlevering");
 	try {
 		const message = await getMessage(client, messageId, channelId);
 
@@ -145,8 +152,6 @@ async function updateMessage(client, messageId, channelId, filePath) {
 			return;
 		}
 
-		// Bygger melding
-
 		const container = await buildMessage(data);
 
 		if (!container) {
@@ -157,10 +162,11 @@ async function updateMessage(client, messageId, channelId, filePath) {
 		try {
 			await message.edit({components: [container]});
 		} catch (e) {
-			console.error(e);
+			console.error(`Error editing message:`, e);
+		  return;
 		}
 	} catch (e) {
-		console.error(e);
+		console.error(`Error updating message:`, e);
 	}
 }
 
@@ -171,9 +177,9 @@ module.exports = {
 		try {
 			setInterval(function () {
 				updateMessage(client, messageId, channelId, filePath);
-			}, 1000 * 3600);
+			}, 1000 * 3600); // 3600 (1 hour)
 		} catch (e) {
-			console.error(e);
+			console.error(`Error in clientReady event:`, e);
 		}
 	},
 };
