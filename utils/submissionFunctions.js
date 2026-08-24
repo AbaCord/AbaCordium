@@ -1,18 +1,24 @@
-const fs = require("fs");
-const path = require("path");
-const {
-	TextDisplayBuilder,
-	SectionBuilder,
-	ButtonBuilder,
-	ButtonStyle,
-	ContainerBuilder,
-	SeparatorBuilder,
-} = require("discord.js");
+import fs from "fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const dayjs = require("dayjs");
-const utc = require("dayjs/plugin/utc");
-const timezone = require("dayjs/plugin/timezone");
-const customParseFormat = require("dayjs/plugin/customParseFormat");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+import {
+    TextDisplayBuilder,
+    SectionBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    ContainerBuilder,
+    SeparatorBuilder,
+} from "discord.js";
+
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc.js";
+import timezone from "dayjs/plugin/timezone.js";
+import customParseFormat from "dayjs/plugin/customParseFormat.js";
+
+const dayjsToDiscord = (date, format = "F") => `<t:${Math.floor(date.valueOf() / 1000)}:${format}>`;
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -21,20 +27,19 @@ dayjs.extend(customParseFormat);
 // Set default timezone
 dayjs.tz.setDefault("Europe/Oslo");
 
-const dayjsToDiscord = (date, format = "F") => `<t:${Math.floor(date.valueOf() / 1000)}:${format}>`;
 
-const idsPath = "../data/innlevering/innleveringMessages.json";
-const firstPath = "../data/innlevering/innlevering1.json";
-const secondPath = "../data/innlevering/innlevering2.json";
-const thirdPath = "../data/innlevering/innlevering3.json";
-const fourthPath = "../data/innlevering/innlevering4.json";
-const fifthPath = "../data/innlevering/innlevering5.json";
+const idsPath = "../data/submission/submissionMessages.json";
+const firstPath = "../data/submission/submission1.json";
+const secondPath = "../data/submission/submission2.json";
+const thirdPath = "../data/submission/submission3.json";
+const fourthPath = "../data/submission/submission4.json";
+const fifthPath = "../data/submission/submission5.json";
 
-async function getData(filePath) {
+export async function getData(filePath) {
 	const file = path.resolve(__dirname, filePath);
 
 	if (!fs.existsSync(file)) {
-		// console.error(`InnleveringEvent.js: File not found: ${file}`);
+		console.error(`submissionEvent.js: File not found: ${file}`); // Debugging log
 		return null;
 	}
 
@@ -53,12 +58,12 @@ async function getMessage(client, messageId, channelId) {
 		const message = await channel.messages.fetch(messageId);
 		return message;
 	} catch (e) {
-		// console.error(`InnleveringEvent.js: Error fetching message ${messageId} in channel ${channelId}:`, e);
+		console.error(`submissionEvent.js: Error fetching message ${messageId} in channel ${channelId}:`, e); // Debugging log
 		return null;
 	}
 }
 
-async function buildMessage(data) {
+export async function buildMessage(data) {
 	const container = new ContainerBuilder();
 	const now = dayjs();
 
@@ -122,46 +127,41 @@ async function buildMessage(data) {
 							container.addSectionComponents(section);
 							break;
 						} catch (e) {
-							console.error(`InnleveringEvent.js: Error processing item for ${kode} - ${typeObj}:`, e);
+							console.error(`submissionEvent.js: Error processing item for ${kode} - ${typeObj}:`, e);
 							return null;
 						}
 					}
 				} catch (e) {
-					console.error(`InnleveringEvent.js: Error processing type for ${kode} - ${typeObj}:`, e);
+					console.error(`submissionEvent.js: Error processing type for ${kode} - ${typeObj}:`, e);
 					return null;
 				}
 
 			container.addSeparatorComponents(new SeparatorBuilder());
 		} catch (e) {
-			console.error(`InnleveringEvent.js: Error processing kode ${kode}:`, e);
+			console.error(`submissionEvent.js: Error processing kode ${kode}:`, e);
 			return null;
 		}
 	}
 	return container;
 }
 
-async function updateMessage(
+
+export async function updateMessageType(
 	client,
-	idsPath,
-	firstPath,
-	secondPath,
-	thirdPath,
-	fourthPath,
-	fifthPath,
+  year
 ) {
-	console.log("Updating message hourly: Innlevering");
+	console.log("Updating message hourly: submission");
 	try {
 		const ids = await getData(idsPath);
 
-		if (!ids) {
-			console.error(`InnleveringEvent.js: IDs not found`);
+		if (!ids || !ids[year]) {
+			console.error(`submissionEvent.js: IDs not found`);
 			return;
 		}
 
-		for (const year in ids) {
-			const yearData = ids[year];
+		const yearData = ids[year];
 
-			let data;
+		let data;
 
 			switch (year) {
 				case "1":
@@ -180,18 +180,18 @@ async function updateMessage(
 					data = await getData(fifthPath);
 					break;
 				default:
-					continue;
+					ret
 			}
 
 			if (!data) {
-				console.error(`InnleveringEvent.js: Data not found for year ${year}`);
+				console.error(`submissionEvent.js: Data not found for year ${year}`);
 				return;
 			}
 
 			const container = await buildMessage(data);
 
 			if (!container) {
-				console.error(`InnleveringEvent.js: Container not built for year ${year}`, e);
+				console.error(`submissionEvent.js: Container not built for year ${year}`, e);
 				return;
 			}
 
@@ -207,27 +207,11 @@ async function updateMessage(
 				try {
 					await message.edit({components: [container]});
 				} catch (e) {
-					console.error(`InnleveringEvent.js: Error editing message for year ${year}:`, e);
+					console.error(`submissionEvent.js: Error editing message for year ${year}:`, e);
 					return;
 				}
 			}
-		}
 	} catch (e) {
-		console.error(`InnleveringEvent.js: Error updating message:`, e);
+		console.error(`submissionEvent.js: Error updating message:`, e);
 	}
 }
-
-module.exports = {
-	name: "clientReady",
-	once: true,
-	async execute(client) {
-		try {
-			updateMessage(client, idsPath, firstPath, secondPath, thirdPath, fourthPath, fifthPath); // Call the function once when the bot starts
-			setInterval(function () {
-				updateMessage(client, idsPath, firstPath, secondPath, thirdPath, fourthPath, fifthPath);
-			}, 1000 * 3600); // 3600 (1 hour)
-		} catch (e) {
-			console.error(`InnleveringEvent.js: Error in clientReady event:`, e);
-		}
-	},
-};
