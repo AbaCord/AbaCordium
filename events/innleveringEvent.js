@@ -22,13 +22,19 @@ dayjs.extend(customParseFormat);
 dayjs.tz.setDefault("Europe/Oslo");
 
 const dayjsToDiscord = (date, format = "F") => `<t:${Math.floor(date.valueOf() / 1000)}:${format}>`;
-const filePath = "../data/innleveringer.json";
 
-async function getInnleveringer(filePath) {
+const idsPath = "../data/innlevering/innleveringMessages.json";
+const firstPath = "../data/innlevering/innlevering1.json";
+const secondPath = "../data/innlevering/innlevering2.json";
+const thirdPath = "../data/innlevering/innlevering3.json";
+const fourthPath = "../data/innlevering/innlevering4.json";
+const fifthPath = "../data/innlevering/innlevering5.json";
+
+async function getData(filePath) {
 	const file = path.resolve(__dirname, filePath);
 
 	if (!fs.existsSync(file)) {
-		console.error("File does not exist");
+		// console.error(`InnleveringEvent.js: File not found: ${file}`);
 		return null;
 	}
 
@@ -47,7 +53,7 @@ async function getMessage(client, messageId, channelId) {
 		const message = await channel.messages.fetch(messageId);
 		return message;
 	} catch (e) {
-		console.error("Could not fetch message", e);
+		// console.error(`InnleveringEvent.js: Error fetching message ${messageId} in channel ${channelId}:`, e);
 		return null;
 	}
 }
@@ -86,7 +92,8 @@ async function buildMessage(data) {
 
 							frist = frist.add(hours, "hour").add(minutes, "minute");
 
-							if (!now.isBefore(frist) || now.add(4, "week").isBefore(frist)) { // Shows only assignments that are due in the next 4 weeks
+							if (!now.isBefore(frist) || now.add(4, "week").isBefore(frist)) {
+								// Shows only assignments that are due in the next 4 weeks
 								continue;
 							}
 
@@ -115,56 +122,98 @@ async function buildMessage(data) {
 							container.addSectionComponents(section);
 							break;
 						} catch (e) {
-							console.error(`Error processing item for ${kode} - ${typeObj}:`, e);
+							console.error(`InnleveringEvent.js: Error processing item for ${kode} - ${typeObj}:`, e);
 							return null;
 						}
 					}
 				} catch (e) {
-					console.error(`Error processing type for ${kode} - ${typeObj}:`, e);
+					console.error(`InnleveringEvent.js: Error processing type for ${kode} - ${typeObj}:`, e);
 					return null;
 				}
 
 			container.addSeparatorComponents(new SeparatorBuilder());
 		} catch (e) {
-			console.error(`Error processing kode ${kode}:`, e);
+			console.error(`InnleveringEvent.js: Error processing kode ${kode}:`, e);
 			return null;
 		}
 	}
 	return container;
 }
 
-async function updateMessage(client, messageId, channelId, filePath) {
+async function updateMessage(
+	client,
+	idsPath,
+	firstPath,
+	secondPath,
+	thirdPath,
+	fourthPath,
+	fifthPath,
+) {
 	console.log("Updating message hourly: Innlevering");
 	try {
-		const message = await getMessage(client, messageId, channelId);
+		const ids = await getData(idsPath);
 
-		if (!message) {
-			console.error("Message not found");
+		if (!ids) {
+			console.error(`InnleveringEvent.js: IDs not found`);
 			return;
 		}
 
-		const data = await getInnleveringer(filePath);
+		for (const year in ids) {
+			const yearData = ids[year];
 
-		if (!data) {
-			console.error("Data not found");
-			return;
-		}
+			let data;
 
-		const container = await buildMessage(data);
+			switch (year) {
+				case "1":
+					data = await getData(firstPath);
+					break;
+				case "2":
+					data = await getData(secondPath);
+					break;
+				case "3":
+					data = await getData(thirdPath);
+					break;
+				case "4":
+					data = await getData(fourthPath);
+					break;
+				case "5":
+					data = await getData(fifthPath);
+					break;
+				default:
+					continue;
+			}
 
-		if (!container) {
-			console.error("Container not built");
-			return;
-		}
+			if (!data) {
+				console.error(`InnleveringEvent.js: Data not found for year ${year}`);
+				return;
+			}
 
-		try {
-			await message.edit({components: [container]});
-		} catch (e) {
-			console.error(`Error editing message:`, e);
-			return;
+			const container = await buildMessage(data);
+
+			if (!container) {
+				console.error(`InnleveringEvent.js: Container not built for year ${year}`, e);
+				return;
+			}
+
+			for (const entry of yearData) {
+				const {messageId, channelId} = entry;
+
+				const message = await getMessage(client, messageId, channelId);
+
+				if (!message) {
+					return;
+				}
+
+				try {
+					await message.edit({components: [container]});
+				} catch (e) {
+					console.error(`InnleveringEvent.js: Error editing message for year ${year}:`, e);
+					return;
+				}
+			}
 		}
 	} catch (e) {
-		console.error(`Error updating message:`, e);
+		console.error(`InnleveringEvent.js: Error updating message:`, e);
 	}
 }
 
@@ -173,32 +222,12 @@ module.exports = {
 	once: true,
 	async execute(client) {
 		try {
-			const clientId = client.user.id;
-
-			let messageId;
-			let channelId;
-
-			if (clientId === "1273990330215043164") {
-				// snadderbot
-				messageId = "1541458239248404590";
-				channelId = "1421048065846149170";
-			} else if (clientId === "1414550822217449513") {
-				// Abacordium (white)
-				messageId = "1541482046579540052";
-				channelId = "1418137268270399558";
-			} else if (clientId === "1417536706328133714") {
-				// Abacordium (black)
-				messageId = "1421186681305956362";
-				channelId = "1418137268270399558";
-			} else {
-				return;
-			}
-			updateMessage(client, messageId, channelId, filePath); // Call the function once when the bot starts
+			updateMessage(client, idsPath, firstPath, secondPath, thirdPath, fourthPath, fifthPath); // Call the function once when the bot starts
 			setInterval(function () {
-				updateMessage(client, messageId, channelId, filePath);
+				updateMessage(client, idsPath, firstPath, secondPath, thirdPath, fourthPath, fifthPath);
 			}, 1000 * 3600); // 3600 (1 hour)
 		} catch (e) {
-			console.error(`Error in clientReady event:`, e);
+			console.error(`InnleveringEvent.js: Error in clientReady event:`, e);
 		}
 	},
 };
