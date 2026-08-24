@@ -3,3 +3,5 @@ node_modules
 config.json
 package-lock.json
 /data/private
+/data/innlevering/innleveringMessages.txt
+
