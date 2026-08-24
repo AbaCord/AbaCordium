@@ -22,9 +22,6 @@ dayjs.extend(customParseFormat);
 dayjs.tz.setDefault("Europe/Oslo");
 
 const dayjsToDiscord = (date, format = "F") => `<t:${Math.floor(date.valueOf() / 1000)}:${format}>`;
-
-const channelId = "1418137268270399558";
-const messageId = "1541482046579540052";
 const filePath = "../data/innleveringer.json";
 
 async function getInnleveringer(filePath) {
@@ -89,33 +86,34 @@ async function buildMessage(data) {
 
 							frist = frist.add(hours, "hour").add(minutes, "minute");
 
-							if (!now.isBefore(frist) || now.add(4, "week").isBefore(frist)) {
+							if (!now.isBefore(frist) || now.add(4, "week").isBefore(frist)) { // Shows only assignments that are due in the next 4 weeks
 								continue;
 							}
 
 							const text = new TextDisplayBuilder().setContent(`
 								### **${typeObj.toUpperCase()} ${item.nummer ? item.nummer : ""}**
 								${frist.format("D. MMM HH:mm")} - ${dayjsToDiscord(frist, "R")}
-								`,
-							);
+								`);
 
 							const link = item.link;
 
 							const button = new ButtonBuilder().setLabel("link").setStyle(ButtonStyle.Link);
 
-							if (typeof link === "string" && (link.startsWith("http://") || link.startsWith("https://"))) {
+							if (
+								typeof link === "string" &&
+								(link.startsWith("http://") || link.startsWith("https://"))
+							) {
 								button.setURL(link);
 							} else {
 								button.setURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 							}
-							
+
 							const section = new SectionBuilder()
 								.addTextDisplayComponents(text)
-							  .setButtonAccessory(button);
+								.setButtonAccessory(button);
 
 							container.addSectionComponents(section);
 							break;
-
 						} catch (e) {
 							console.error(`Error processing item for ${kode} - ${typeObj}:`, e);
 							return null;
@@ -126,7 +124,7 @@ async function buildMessage(data) {
 					return null;
 				}
 
-				container.addSeparatorComponents(new SeparatorBuilder());
+			container.addSeparatorComponents(new SeparatorBuilder());
 		} catch (e) {
 			console.error(`Error processing kode ${kode}:`, e);
 			return null;
@@ -136,7 +134,7 @@ async function buildMessage(data) {
 }
 
 async function updateMessage(client, messageId, channelId, filePath) {
-	console.log("Updating message: Innlevering");
+	console.log("Updating message hourly: Innlevering");
 	try {
 		const message = await getMessage(client, messageId, channelId);
 
@@ -163,7 +161,7 @@ async function updateMessage(client, messageId, channelId, filePath) {
 			await message.edit({components: [container]});
 		} catch (e) {
 			console.error(`Error editing message:`, e);
-		  return;
+			return;
 		}
 	} catch (e) {
 		console.error(`Error updating message:`, e);
@@ -175,6 +173,26 @@ module.exports = {
 	once: true,
 	async execute(client) {
 		try {
+			const clientId = client.user.id;
+
+			let messageId;
+			let channelId;
+
+			if (clientId === "1273990330215043164") {
+				// snadderbot
+				messageId = "1541458239248404590";
+				channelId = "1421048065846149170";
+			} else if (clientId === "1414550822217449513") {
+				// Abacordium (white)
+				messageId = "1541482046579540052";
+				channelId = "1418137268270399558";
+			} else if (clientId === "1417536706328133714") {
+				// Abacordium (black)
+				messageId = "1421186681305956362";
+				channelId = "1418137268270399558";
+			} else {
+				return;
+			}
 			updateMessage(client, messageId, channelId, filePath); // Call the function once when the bot starts
 			setInterval(function () {
 				updateMessage(client, messageId, channelId, filePath);
