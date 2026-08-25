@@ -159,7 +159,11 @@ export async function storeMessageId(year, messageId, channelId) {
 
 async function setData(filePath, data) {
 	const file = path.resolve(__dirname, filePath);
-	await fs.writeFile(file, JSON.stringify(data));
+	await fs.writeFile(file, JSON.stringify(data), "utf-8", (err) => {
+		if (err) {
+			console.error(`submissionFunctions.js: Error writing to file ${file}:`, err);
+		}
+	});
 }
 
 export async function updateMessageType(
@@ -171,7 +175,7 @@ export async function updateMessageType(
 		const ids = await getData(idsPath);
 
 		if (!ids || !ids[year]) {
-			console.error(`submissionEvent.js: IDs not found`);
+			console.error(`submissionEvent.js: IDs not found for year ${year}`);
 			return;
 		}
 
@@ -196,7 +200,8 @@ export async function updateMessageType(
 					data = await getData(fifthPath);
 					break;
 				default:
-					ret
+					console.error(`submissionEvent.js: Invalid year ${year}`);
+					return;
 			}
 
 			if (!data) {
@@ -207,7 +212,7 @@ export async function updateMessageType(
 			const container = await buildMessage(data);
 
 			if (!container) {
-				console.error(`submissionEvent.js: Container not built for year ${year}`, e);
+				console.error(`submissionEvent.js: Container not built for year ${year}`);
 				return;
 			}
 
@@ -228,6 +233,6 @@ export async function updateMessageType(
 				}
 			}
 	} catch (e) {
-		console.error(`submissionEvent.js: Error updating message:`, e);
+		console.error(`submissionEvent.js: Error updating message for year ${year}:`, e);
 	}
 }
