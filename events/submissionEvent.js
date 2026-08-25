@@ -1,8 +1,5 @@
 const sf = require("../utils/submissionFunctions.js");
 
-
-
-
 module.exports = {
 	name: "clientReady",
 	once: true,

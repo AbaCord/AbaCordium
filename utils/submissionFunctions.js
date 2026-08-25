@@ -1,9 +1,10 @@
 import fs from "fs";
-import path from "node:path";
+import path from "path";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 import {
     TextDisplayBuilder,
     SectionBuilder,
@@ -58,7 +59,7 @@ async function getMessage(client, messageId, channelId) {
 		const message = await channel.messages.fetch(messageId);
 		return message;
 	} catch (e) {
-		console.error(`submissionEvent.js: Error fetching message ${messageId} in channel ${channelId}:`, e); // Debugging log
+		// console.error(`submissionEvent.js: Error fetching message ${messageId} in channel ${channelId}:`, e); // Debugging log
 		return null;
 	}
 }
@@ -145,6 +146,21 @@ export async function buildMessage(data) {
 	return container;
 }
 
+export async function storeMessageId(year, messageId, channelId) {
+	try {
+		const ids = await getData(idsPath) || {};
+		ids[year] = ids[year] || [];
+		ids[year].push({ messageId, channelId });
+		await setData(idsPath, ids);
+	} catch (e) {
+		console.error(`submissionFunctions.js: Error storing message ID for year ${year}:`, e);
+	}
+}
+
+async function setData(filePath, data) {
+	const file = path.resolve(__dirname, filePath);
+	await fs.writeFile(file, JSON.stringify(data));
+}
 
 export async function updateMessageType(
 	client,
@@ -201,7 +217,7 @@ export async function updateMessageType(
 				const message = await getMessage(client, messageId, channelId);
 
 				if (!message) {
-					return;
+					continue; // Skip if message is not found
 				}
 
 				try {
