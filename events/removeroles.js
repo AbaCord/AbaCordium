@@ -1,6 +1,7 @@
 const CHANNEL_ID = "1417541222918131772" // reaction roles discord channel id
 
 const roles = [
+  // Format: RoleID, role name, emojiID
   //årroller, og linje
   { id: "1406392791315120299", name: "1.år", emojiName: "1️⃣" },
   { id: "1406393165791105156", name: "2. år", emojiName: "2️⃣" },
@@ -22,7 +23,8 @@ const roles = [
 
   //hobbyroller
   { id: "1420108296861519915", name: "Trening", emojiName: "💪" },
-  { id: "1430606576468627606", name: "Anime", emojiId: "1430606291126063144" }
+  { id: "1430606576468627606", name: "Anime", emojiId: "1430606291126063144" },
+  { id: "1549003716705652817", name: "Jet Lag: The Game", emojiId: "1549003200479232000" }
 
 ]
 // legge til roller
