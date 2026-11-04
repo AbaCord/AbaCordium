@@ -21,6 +21,7 @@ const roles = [
   { id: "1425464377125113927", name: "Smash Bros", emojiId: "1425482804522782864" },
   { id: "1425482546438864906", name: "Counterstrike", emojiId: "1425482744179331215" },
   { id: "1537854575418155008", name: "Rocket League", emojiId: "1537854387966451763" },
+  { id: "1567588116360069210", name: "Deadlock", emojiId: "1567588366289997854" },
 
   //hobbyroller
   { id: "1420108296861519915", name: "Trening", emojiName: "💪" },
