@@ -33,8 +33,8 @@ GUILDID={test_server_id}
 
 ### 4. Install dependencies, commands and start the bot
 ```bash
-npm install # Installs from package.json
-npm start # Runs deploy-commands.js and then index.js
+bun install # Installs from package.json
+bun start # Runs deploy-commands.js and then index.js
 ```
 
 ## Developer guide

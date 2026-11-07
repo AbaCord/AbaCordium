@@ -1,16 +1,16 @@
 {
-  "name": "abacordium",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "start": "npm run load && npm run index",
-    "load": "node deploy-commands.js",
-    "index": "node index.js"
-  },
-  "dependencies": {
-    "dayjs": "^1.11.18",
-    "discord.js": "^14.22.1",
-    "dotenv": "^17.2.2",
-    "node-cron": "^4.2.1"
-  }
+    "name": "abacordium",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "start": "bun run load && bun run index",
+        "load": "bun deploy-commands.js",
+        "index": "bun index.js"
+    },
+    "dependencies": {
+        "dayjs": "^1.11.23",
+        "discord.js": "^14.28.1",
+        "dotenv": "^17.4.2",
+        "node-cron": "^4.6.0"
+    }
 }
